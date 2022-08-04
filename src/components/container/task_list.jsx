@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { LEVELS } from '../../models/levels.enum'
 import { Task } from '../../models/task.class'
+import TaskForm from '../../pure/forms/taskForm';
 import TaskComponent from '../../pure/task';
 const Tasklist = () => {
 
@@ -20,11 +21,35 @@ const Tasklist = () => {
 
         };
     }, [tasks]);
+//==============================================
+ function completeTask(task){
+console.log('complete this task', task);
+// buscar indice del mismo al q dimos click
 
-    /*    const changecompleted = (id) => {
-           console.log('TODO:  cambiar estado de una tarea');
-       } */
+const index = tasks.indexOf(task)
+const temp = [...tasks]
+temp[index].completed = !temp[index].completed  
 
+setTasks(temp)
+
+ }
+//==============================================
+
+function deleteTask(task){
+    const index = tasks.indexOf(task)
+const temp = [...tasks]
+temp.splice(index,1)
+
+setTasks(temp)
+}
+//========================================
+
+function addTask(task){
+    
+    const temp = [...tasks]  
+    temp.push(task)
+    setTasks(temp)
+}
     return (
         <div>
             <div className='col-12'>
@@ -51,8 +76,9 @@ const Tasklist = () => {
                                    return (
                                     <TaskComponent
                                     key={index} 
-                                    task={task} >
-                                    
+                                    task={task} 
+                                    complete={completeTask}
+                                    deleted={deleteTask}>
                                     </TaskComponent>
                                     )
                                 })
@@ -62,6 +88,7 @@ const Tasklist = () => {
 
 
                 </div>
+                <TaskForm add = {addTask}>      </TaskForm>
             </div>
 
 

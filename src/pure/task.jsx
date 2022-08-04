@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Task } from '../models/task.class'
 import { LEVELS } from '../models/levels.enum';
 
-const TaskComponent = ({ task }) => {
+const TaskComponent = ({ task, complete, deleted }) => {
 
   useEffect(() => {
     console.log('created task!')
@@ -13,7 +13,7 @@ const TaskComponent = ({ task }) => {
   }, [task]);
 
 
-  function taskLevelBudge(){
+  function taskLevelBudge() {
     switch (task.level) {
       case LEVELS.NORMAL: return (
         <h6 className='mb-0' >
@@ -36,19 +36,19 @@ const TaskComponent = ({ task }) => {
           </span>
         </h6>
       )
-        
+
       default:
         break;
     }
   }
 
-  function taskIconCompleted(){
+  function taskIconCompleted() {
 
-        if(task.completed){
-          return <i class="bi-toggle-on" style={{color:'green'}}></i>
-        }else{
-          return <i class="bi-toggle-off" style={{color:'grey'}}></i>
-        }
+    if (task.completed) {
+      return <i onClick={() => complete(task)} class="bi-toggle-on task-action" style={{ color: 'green' }}></i>
+    } else {
+      return <i onClick={() => complete(task)} class="bi-toggle-off task-action" style={{ color: 'grey' }}></i>
+    }
   }
 
 
@@ -62,14 +62,14 @@ const TaskComponent = ({ task }) => {
         <span>{task.description}</span>
       </td>
       <td className='align-middle'>
-   {   taskLevelBudge()}
+        {taskLevelBudge()}
       </td>
       <td className='align-middle'>
-{taskIconCompleted()}
-         <i class="bi-trash" style={{color:'tomato'}}></i>
-     
-      
-       
+        {taskIconCompleted()}
+        <i onClick={() => deleted(task)} class="bi-trash task-action" style={{ color: 'tomato' }}></i>
+
+
+
       </td>
 
     </tr>
@@ -86,7 +86,9 @@ const TaskComponent = ({ task }) => {
 }
 
 TaskComponent.propTypes = {   //class
-  task: PropTypes.instanceOf(Task)  // prop task === class Task 
+  task: PropTypes.instanceOf(Task).isRequired,  // prop task === class Task  
+  complete: PropTypes.func.isRequired,
+  deleted: PropTypes.func.isRequired
 }
 
 export default TaskComponent
